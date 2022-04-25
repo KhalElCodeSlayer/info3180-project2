@@ -5,11 +5,11 @@
             
             <div class="form-group">
                 <label>Username</label>
-                <input type="text" class="form-control form-control-lg" />
+                <input type="text" name="username" class="form-control form-control-lg" />
             </div>
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" class="form-control form-control-lg" />
+                <input type="password" name="password" class="form-control form-control-lg" />
             </div>
             <button type="submit" class="btn btn-success btn-lg btn-block">Login</button>
         </form>
@@ -27,7 +27,10 @@
                 let form_data = new FormData(document.getElementById('login'))
                 fetch('/api/auth/login', {
                     method: 'POST',
-                    body: form_data
+                    body: form_data,
+                    headers: {
+                        'X-CSRFToken': this.csrf_token
+                    }
                 }).then((response) => {
                     return response.json();
                 }).then((data) => {

@@ -26,6 +26,7 @@ coverage
 *.njsproj
 *.sln
 *.sw?
+uploads
 
 # Python
 __pycache__

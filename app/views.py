@@ -72,7 +72,7 @@ def register():
     form = SignupForm()
     if request.method == 'POST':
         if form.validate_on_submit():
-            username = request['Username']
+            username = form.username.data
             password = generate_password_hash(request.form['password'], method='pbkdf2:sha256')
             email = form.email.data
             name = form.name.data
@@ -81,7 +81,7 @@ def register():
             photo = form.photo.data
             filename = secure_filename(photo.filename)
             photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            db.session.add(Users(username, password, name, email, location, bio, filename))
+            db.session.add(Users(username, password, name, email, location, bio, filename, datetime.datetime.date(datetime.datetime.today())))
             db.session.commit() 
             return jsonify({ 'message': 'User Succesfully Added =)'})           
         return jsonify({'errors': form_errors(form)})

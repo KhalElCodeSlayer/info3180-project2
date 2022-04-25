@@ -5,32 +5,32 @@
         <form class="form2" id="signup" @submit.prevent="handler">
             
             <div class="form-group">
-                <label>Username</label>
-                <input type="text" name="Username" class="form-control form-control-lg"/>
+                <label for="username">Username</label>
+                <input type="text" name="username" class="form-control form-control-lg"/>
                 </div>
             <div class="form-group">
-                <label>Fullname</label>
-                <input type="text" name="Full Name" class="form-control form-control-lg" />
+                <label for="name">Full Name</label>
+                <input type="text" name="name" class="form-control form-control-lg" />
             </div>
             <div class="form-group">
-                <label>Password</label>
-                <input type="password" name="Password" class="form-control form-control-lg" />
+                <label for="password">Password</label>
+                <input type="password" name="password" class="form-control form-control-lg" />
             </div>
             <div class="form-group">
-                <label>Email</label>
-                <input type="email" name="Email" class="form-control form-control-lg"/>
+                <label for="email">Email</label>
+                <input type="email" name="email" class="form-control form-control-lg"/>
             </div>
             <div class="form-group">
-                <label>Location</label>
-                <input type="text" name="Location" class="form-control form-control-lg"/>
+                <label for="location">Location</label>
+                <input type="text" name="location" class="form-control form-control-lg"/>
             </div>
             <div class="form-group">
-                <label>Biography</label>
-                <input type="textarea" name="Biography" class="form-control form-control-lg"/>
+                <label for="biography">Biography</label>
+                <textarea name="biography" cols="30" rows="5" class="form-control form-control-lg"></textarea>
             </div>
             <div class="form-group">
-                <label>Upload Photo</label>
-                <input type="file" name="Photo" class="form-control form-control-lg" accept="image/*"/>
+                <label for="photo">Upload Photo</label>
+                <input type="file" name="photo" class="form-control form-control-lg" accept="image/*"/>
             </div>
             
             <button type="submit" class="btn btn-success btn-lg btn-block">Register</button>
