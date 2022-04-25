@@ -45,13 +45,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto">
             <li class="nav-item">
-              <RouterLink class="nav-link" to="/login">Add Car</RouterLink>
+              <RouterLink class="nav-link" to="/">Add Car</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink class="nav-link" to="/signup">Explore</RouterLink>
+              <RouterLink class="nav-link" to="/">Explore</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink class="nav-link" to="/signup">My Profile</RouterLink>
+              <RouterLink class="nav-link" to="/">My Profile</RouterLink>
             </li>
           </ul>
         </div>
