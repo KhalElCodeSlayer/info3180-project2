@@ -3,15 +3,15 @@
     
     <div class="vue-tempalte">
         <h3>Login to your account</h3>
-        <form class="form1">
+        <form @submit.prevent="handleSubmit" class="form1">
             
             <div class="form-group">
                 <label>Username</label>
-                <input type="text" class="form-control form-control-lg" />
+                <input type="text" class="form-control form-control-lg" v-model="uname" required/>
             </div>
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" class="form-control form-control-lg" />
+                <input type="password" class="form-control form-control-lg" v-model="password" required/>
             </div>
             <button type="submit" class="btn btn-success btn-lg btn-block">Login</button>
         </form>
@@ -19,8 +19,20 @@
 </template>
 <script>
     export default {
+        name: "Login",
         data() {
-            return {}
+            return {
+                uname: '',
+                password: ''
+
+            };
+        },
+        methods: {
+            async handleSubmit(){
+                
+
+            }
+            
         }
     }
 </script>
