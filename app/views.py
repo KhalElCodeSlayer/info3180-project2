@@ -15,6 +15,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 from functools import wraps
 import datetime
+from flask_wtf.csrf import generate_csrf
 
 
 #JWT decorator. Checks for a valid JWT token
@@ -57,9 +58,9 @@ def requires_token(f):
 # Routing for your application.
 ###
 
-@app.route('/')
-def index():
-    return jsonify(message="This is the beginning of our API")
+@app.route('/api/csrf-token', methods=['GET'])
+def get_csrf():
+    return jsonify({'csrf_token': generate_csrf()})
 
 
 
@@ -71,7 +72,7 @@ def register():
     form = SignupForm()
     if request.method == 'POST':
         if form.validate_on_submit():
-            username = form.username.data
+            username = request['Username']
             password = generate_password_hash(request.form['password'], method='pbkdf2:sha256')
             email = form.email.data
             name = form.name.data

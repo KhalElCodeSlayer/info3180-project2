@@ -1,9 +1,7 @@
 <template>
-
-    
     <div class="vue-tempalte">
         <h3>Login to your account</h3>
-        <form class="form1">
+        <form class="form1" id="login" @submit.prevent="handler">
             
             <div class="form-group">
                 <label>Username</label>
@@ -18,9 +16,37 @@
     </div>
 </template>
 <script>
+
     export default {
         data() {
-            return {}
+            return {csrf_token: ''}
+        },
+        methods: {
+            handler() {
+                let self = this;
+                let form_data = new FormData(document.getElementById('login'))
+                fetch('/api/auth/login', {
+                    method: 'POST',
+                    body: form_data
+                }).then((response) => {
+                    return response.json();
+                }).then((data) => {
+                    this.$store.state.token = data.token;
+                    this.$store.state.user = data.id;
+                }).then((error) => console.log(error))
+            },
+            getCsrfToken() {
+                let self = this;
+                fetch('/api/csrf-token')
+                .then((response)=> response.json())
+                .then((data)=> {
+                    console.log(data)
+                    self.csrf_token = data.csrf_token
+                    })
+            }
+        },
+        created() {
+            this.getCsrfToken();
         }
     }
 </script>
