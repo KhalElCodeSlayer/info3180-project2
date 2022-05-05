@@ -45,13 +45,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto">
             <li class="nav-item">
-              <RouterLink class="nav-link" to="/">Add Car</RouterLink>
+              <RouterLink class="nav-link" to="/cars/new">Add Car</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink class="nav-link" to="/">Explore</RouterLink>
+              <RouterLink class="nav-link" to="/explore">Explore</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink class="nav-link" to="/">My Profile</RouterLink>
+              <RouterLink class="nav-link" to="`/users/${users}`">My Profile</RouterLink>
             </li>
           </ul>
         </div>
@@ -62,7 +62,22 @@
 </template>
 
 <script>
-import { RouterLink } from "vue-router";
+  import { RouterLink } from "vue-router";
+  export default {
+    methods: {
+      getCsrfToken() {
+        fetch('/api/csrf-token')
+          .then((response)=> response.json())
+          .then((data)=> {
+              this.$store.commit('update_csrf_token', data.csrf_token)
+              console.log(this.$store.state.csrf_token)
+        })
+      }
+    },
+    created() {
+        this.getCsrfToken()
+      }
+  }
 </script>
 
 <style scoped>

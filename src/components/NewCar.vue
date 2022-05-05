@@ -53,19 +53,30 @@
     export default {
         data() {
             return {
-                csrf_token: ''
             }
         },
         methods: {
             formhandler() {
                 let form_data = new FormData(document.getElementById('form'));
+                console.log('token',this.$store.state.token)
                 fetch('/api/cars', {
                     method: 'POST',
                     body: form_data,
                     headers: {
-                        
+                        'X-CSRFToken': this.$store.state.csrf_token,
+                        'Authorization': `Bearer ${this.$store.state.token}`
                     }
+                }).then((response) => {
+                    return response.json()
+                }).then((data)=>{})
+                .then((errors) =>{
+                    console.log(errors)
                 })
+            }
+        },
+        created() {
+            if (this.$store.state.token == '') {
+                this.$router.push('/')
             }
         }
     }

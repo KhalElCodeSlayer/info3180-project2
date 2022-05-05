@@ -4,7 +4,9 @@ Jinja2 Documentation:    https://jinja.palletsprojects.com/
 Werkzeug Documentation:  https://werkzeug.palletsprojects.com/
 This file creates your application.
 """
+from cmath import log
 import os
+from pydoc import plain
 from app import app
 from flask import render_template, request, jsonify, send_from_directory, g
 from flask_login import login_user, logout_user, current_user, login_required
@@ -40,7 +42,7 @@ def requires_token(f):
             payload = jwt.decode(token, app.config.get(
                 'SECRET_KEY'), algorithms="HS256")
             # may be changed when auth is complete
-            current_user = User.query.get(payload.get('id'))
+            current_user = Users.query.get(payload.get('id'))
             if not current_user:
                 return jsonify({'message': "Token is invalid, no user matched to token"}), 401
         except jwt.InvalidSignatureError:
@@ -73,7 +75,7 @@ def register():
     if request.method == 'POST':
         if form.validate_on_submit():
             username = form.username.data
-            password = generate_password_hash(request.form['password'], method='pbkdf2:sha256')
+            password = form.password.data
             email = form.email.data
             name = form.name.data
             location = form.location.data
@@ -96,7 +98,7 @@ def login():
     if request.method == 'POST':
         if form.validate_on_submit():
             username = form.username.data
-            password = form.password.data
+            password = request.form['password']
             user = Users.query.filter_by(username=username).first()
             if user is not None and check_password_hash(user.password,password):
                 login_user(user)
@@ -106,8 +108,9 @@ def login():
                     'iat': datetime.datetime.now(datetime.timezone.utc),
                     'exp': datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes=45)
                 }
-                token = jwt.encode(payload, app.config['SECRET_KEY'], algorithm='HS256')
-                return jsonify({"login_message" : "Logged in Successfully", 'token': token, 'id': user.id})
+                token = jwt.encode(payload=payload, key=app.config['SECRET_KEY'], algorithm='HS256')
+                print(token.decode())
+                return jsonify({"login_message" : "Logged in Successfully", 'token': token.decode(), 'id': user.id})
             else:
                 return jsonify({"error_message" : "Username or Password is incorect"})
         return jsonify({"errors": form_errors(form)})  
@@ -118,6 +121,7 @@ def login():
 
 @app.route('/api/auth/logout', methods=['POST'])
 @requires_token
+@login_required
 def logout():
     logout_user()
     return jsonify({"message" : "Log out successful"}) #Logout Message
@@ -127,6 +131,7 @@ def logout():
 
 @app.route('/api/cars', methods=['GET'])
 @requires_token
+@login_required
 def getcars():
     if request.method == 'GET':
         cars = db.session.query(Cars).order_by(Cars.cid.desc()).all()
@@ -155,6 +160,7 @@ def getcars():
 
 @app.route('/api/cars', methods=['POST'])
 @requires_token
+@login_required
 def addcars():
     form = AddCarForm()
     if request.method == 'POST':
@@ -184,6 +190,7 @@ def addcars():
 
 @app.route('/api/cars/<int:car_id>', methods=['GET'])
 @requires_token
+@login_required
 def getcar(car_id):
     if request.method == 'GET':
         result = db.session.query(Cars).filter_by(cid=car_id).first()
@@ -209,6 +216,7 @@ def getcar(car_id):
 
 @app.route('/api/search', methods=['GET'])
 @requires_token
+@login_required
 def search():
     if request.method == 'GET':
         make = request.args.get('make')
@@ -234,6 +242,7 @@ def search():
 
 @app.route('/api/users/<int:user_id>', methods=['GET'])
 @requires_token
+@login_required
 def getuser(user_id):
     if request.method == 'GET':
         user = db.session.query(Users).filter_by(uid=user_id).first()
@@ -248,6 +257,7 @@ def getuser(user_id):
 
 @app.route('/api/users/<int:user_id>/favourites', methods=['GET'])
 @requires_token
+@login_required
 def getfavs(user_id):
     if request.method == 'GET':
         favs = db.session.query(Favourites).filter(Favourites.user_id ==user_id).all()

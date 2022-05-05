@@ -44,33 +44,19 @@
         },
         methods: {
             handler() {
-                let self = this;
                 let form_data = new FormData(document.getElementById('signup'))
-                console.log(...form_data)
                 fetch('/api/register', {
                     method: 'POST',
                     body: form_data,
                     headers: {
-                        'X-CSRFToken': this.csrf_token
+                        'X-CSRFToken': this.$store.state.csrf_token
                     }
                 }).then((response) => {
                     return response.json();
                 }).then((data) => {
-                    console.log(data)
+                    this.$router.push('login')
                 }).then((error) => console.log(error))
-            },
-            getCsrfToken() {
-                let self = this;
-                fetch('/api/csrf-token')
-                .then((response)=> response.json())
-                .then((data)=> {
-                    console.log(data)
-                    self.csrf_token = data.csrf_token
-                    })
             }
-        },
-        created() {
-            this.getCsrfToken();
         }
     }
 
